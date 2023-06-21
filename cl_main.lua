@@ -42,4 +42,4 @@ end)
 -- KEYMAPPINGS
 ------------------------------------------
 
-RegisterKeyMapping('kilpi', 'Turvavyö ( Ajoneuvossa )', 'keyboard', 'b')
+RegisterKeyMapping('kilpi', 'Käytä kilpeä', 'keyboard', 'b')
