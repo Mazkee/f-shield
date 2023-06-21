@@ -1,42 +1,41 @@
 ------------------------------------------
+-- CACHE
+------------------------------------------
+
+lib.onCache('vehicle', function(value)
+    if not value then return end
+
+    DeleteEntity(shieldProp)
+    shieldEnabled = false
+end)
+
+------------------------------------------
 -- FUNCTIONS
 ------------------------------------------
 
-local function ReadyShieldModel()
-    RequestModel(`prop_ballistic_shield`)
-    repeat Wait(50) until HasModelLoaded(`prop_ballistic_shield`)
-end
+local function equipShield()
+    local player = PlayerPedId()
+    lib.requestModel(`prop_ballistic_shield`, 100)
 
-RegisterNetEvent('f-mazkeenkoodikoulu2:client:main:equipShield', function()
-    local Player = PlayerPedId()
-    ReadyShieldModel()
-    if not IsPedInAnyVehicle(Player, true) then
+    if not IsPedInAnyVehicle(player, true) then
         shieldEnabled = not shieldEnabled
-        if shieldEnabled then
-            shieldProp = CreateObject(`prop_ballistic_shield`, GetEntityCoords(Player), 1, 1, 1)
-            AttachEntityToEntity(shieldProp, Player, GetPedBoneIndex(Player, 0xEEEB), 0.15, -0.12, 0.0, -45.0, -190.0, -5.0, false, false, 1, 0, 0, 1)
-            TriggerEvent('f-mazkeenkoodikoulu2:client:main:shieldLoop', Player)
-        else
-            DeleteEntity(shieldProp)
-        end
-    end
-end)
 
-RegisterNetEvent('f-mazkeenkoodikoulu2:client:main:shieldLoop', function(Player)
-    while shieldEnabled do
-        if IsPedInAnyVehicle(Player, true) then
-            shieldEnabled = false
+        if shieldEnabled then
+            shieldProp = CreateObject(`prop_ballistic_shield`, GetEntityCoords(player), 1, 1, 1)
+            AttachEntityToEntity(shieldProp, player, GetPedBoneIndex(player, 0xEEEB), 0.15, -0.12, 0.0, -45.0, -190.0, -5.0, false, false, 1, 0, 0, 1)
+            return
         end
-        Wait(100)
+
+        DeleteEntity(shieldProp)
     end
-end)
+end
 
 ------------------------------------------
 -- COMMANDS
 ------------------------------------------
 
 RegisterCommand('kilpi', function()
-    TriggerEvent('f-mazkeenkoodikoulu2:client:main:equipShield')
+    equipShield()
 end)
 
 ------------------------------------------
